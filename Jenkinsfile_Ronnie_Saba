@@ -8,28 +8,22 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                dir('jenkins_project') {
-                    sh '''
-                        python3 -m venv "$VIRTUAL_ENV"
-                        "$VIRTUAL_ENV/bin/python" -m pip install -r requirements.txt
-                    '''
-                }
+                sh '''
+                    python3 -m venv "$VIRTUAL_ENV"
+                    "$VIRTUAL_ENV/bin/python" -m pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Lint') {
             steps {
-                dir('jenkins_project') {
-                    sh '"$VIRTUAL_ENV/bin/python" -m flake8 app.py'
-                }
+                sh '"$VIRTUAL_ENV/bin/python" -m flake8 app.py'
             }
         }
 
         stage('Test') {
             steps {
-                dir('jenkins_project') {
-                    sh '"$VIRTUAL_ENV/bin/python" -m pytest'
-                }
+                sh '"$VIRTUAL_ENV/bin/python" -m pytest'
             }
         }
 
