@@ -1,0 +1,44 @@
+Lab 10 Part 4 Report
+Ronnie Saba
+17 November 2026
+
+In Part 4, I extended the Jenkins pipeline to check test coverage, scan the
+Python code for security issues, and deploy the application locally on my laptop.
+Jenkins build #4 completed successfully, with all six stages passing.
+
+The pipeline runs in this order:
+Setup -> Lint -> Test -> Coverage -> Security Scan -> Deploy
+
+Setup creates a Python virtual environment and installs the dependencies from
+requirements.txt. I added coverage and bandit to this file. Lint checks the
+Python files for code style problems, and Test runs the unit test using pytest.
+The unit test passed, and the lint check found no violations.
+
+The new Coverage stage uses coverage.py to measure how much of app.py is
+executed during the unit test. It then displays the result and creates XML
+and HTML reports. The application achieved 75% statement coverage: the test
+executed three of its four executable statements. The missing statement was
+the print command on line 6, which runs when app.py is started directly.
+The test imports the greet function, so that print command does not run
+during the test. It was executed later during deployment.
+
+The new Security Scan stage uses Bandit. Bandit reads Python source code and
+looks for common patterns that could cause security problems. It scanned
+app.py and deploy_local.py and reported "No issues identified." There were
+zero findings at every severity level, and no files were skipped. If Bandit
+finds an issue, the stage fails and deployment does not run.
+
+For local deployment, I replaced the placeholder message with deploy_local.py.
+This script creates a deployment folder, copies app.py into it, and runs the
+copied application to check that it works. In this build, the destination was:
+
+/Users/ronniesaba/jenkins_deployments/Python-CI-CD_RonnieSaba/app.py
+
+The deployment output included:
+Hello, World from Ronnie Saba!
+Local deployment successful.
+
+Jenkins saved the coverage, security scan, and deployment reports as build
+artifacts before cleaning its workspace. The deployed application remained
+in the local deployment folder after cleanup, and its contents matched the
+source file. The build ended with "Finished: SUCCESS".

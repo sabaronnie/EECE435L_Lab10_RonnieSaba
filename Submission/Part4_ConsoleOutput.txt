@@ -1,0 +1,192 @@
+Started by user Ronnie Saba
+Obtained Jenkinsfile_Ronnie_Saba from git https://github.com/sabaronnie/EECE435L_Lab10_RonnieSaba
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /Users/ronniesaba/.jenkins/workspace/Python-CI-CD_RonnieSaba
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/sabaronnie/EECE435L_Lab10_RonnieSaba
+ > git init /Users/ronniesaba/.jenkins/workspace/Python-CI-CD_RonnieSaba # timeout=10
+Fetching upstream changes from https://github.com/sabaronnie/EECE435L_Lab10_RonnieSaba
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5 (Apple Git-154)'
+ > git fetch --tags --force --progress -- https://github.com/sabaronnie/EECE435L_Lab10_RonnieSaba +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/sabaronnie/EECE435L_Lab10_RonnieSaba # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision fa2d6745bd7870d3c383597885c5bc611c73908b (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f fa2d6745bd7870d3c383597885c5bc611c73908b # timeout=10
+Commit message: "Add coverage security scanning and local deployment"
+ > git rev-list --no-walk 3df072b0131506ea6b17748ce034a6cb556d7918 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Setup)
+[Pipeline] sh
++ python3 -m venv venv
++ venv/bin/python -m pip install -r requirements.txt
+Collecting flake8
+  Using cached flake8-7.3.0-py2.py3-none-any.whl (57 kB)
+Collecting pytest
+  Using cached pytest-8.4.2-py3-none-any.whl (365 kB)
+Collecting coverage
+  Using cached coverage-7.10.7-cp39-cp39-macosx_11_0_arm64.whl (218 kB)
+Collecting bandit
+  Using cached bandit-1.8.6-py3-none-any.whl (133 kB)
+Collecting pyflakes<3.5.0,>=3.4.0
+  Using cached pyflakes-3.4.0-py2.py3-none-any.whl (63 kB)
+Collecting mccabe<0.8.0,>=0.7.0
+  Using cached mccabe-0.7.0-py2.py3-none-any.whl (7.3 kB)
+Collecting pycodestyle<2.15.0,>=2.14.0
+  Using cached pycodestyle-2.14.0-py2.py3-none-any.whl (31 kB)
+Collecting packaging>=20
+  Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Collecting pygments>=2.7.2
+  Using cached pygments-2.21.0-py3-none-any.whl (1.3 MB)
+Collecting exceptiongroup>=1
+  Using cached exceptiongroup-1.3.1-py3-none-any.whl (16 kB)
+Collecting pluggy<2,>=1.5
+  Using cached pluggy-1.6.0-py3-none-any.whl (20 kB)
+Collecting tomli>=1
+  Using cached tomli-2.5.0-py3-none-any.whl (14 kB)
+Collecting iniconfig>=1
+  Using cached iniconfig-2.1.0-py3-none-any.whl (6.0 kB)
+Collecting PyYAML>=5.3.1
+  Using cached pyyaml-6.0.3-cp39-cp39-macosx_11_0_arm64.whl (174 kB)
+Collecting rich
+  Using cached rich-15.0.0-py3-none-any.whl (310 kB)
+Collecting stevedore>=1.20.0
+  Using cached stevedore-5.5.0-py3-none-any.whl (49 kB)
+Collecting typing-extensions>=4.6.0
+  Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Collecting markdown-it-py>=2.2.0
+  Using cached markdown_it_py-3.0.0-py3-none-any.whl (87 kB)
+Collecting mdurl~=0.1
+  Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Installing collected packages: mdurl, typing-extensions, pygments, markdown-it-py, tomli, stevedore, rich, PyYAML, pyflakes, pycodestyle, pluggy, packaging, mccabe, iniconfig, exceptiongroup, pytest, flake8, coverage, bandit
+Successfully installed PyYAML-6.0.3 bandit-1.8.6 coverage-7.10.7 exceptiongroup-1.3.1 flake8-7.3.0 iniconfig-2.1.0 markdown-it-py-3.0.0 mccabe-0.7.0 mdurl-0.1.2 packaging-26.3 pluggy-1.6.0 pycodestyle-2.14.0 pyflakes-3.4.0 pygments-2.21.0 pytest-8.4.2 rich-15.0.0 stevedore-5.5.0 tomli-2.5.0 typing-extensions-4.16.0
+WARNING: You are using pip version 21.2.4; however, version 26.0.1 is available.
+You should consider upgrading via the '/Users/ronniesaba/.jenkins/workspace/Python-CI-CD_RonnieSaba/venv/bin/python -m pip install --upgrade pip' command.
++ mkdir -p reports
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Lint)
+[Pipeline] sh
++ venv/bin/python -m flake8 app.py deploy_local.py tests
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] sh
++ venv/bin/python -m pytest
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/ronniesaba/.jenkins/workspace/Python-CI-CD_RonnieSaba
+collected 1 item
+
+tests/test_app.py .                                                      [100%]
+
+============================== 1 passed in 0.01s ===============================
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Coverage)
+[Pipeline] sh
++ venv/bin/python -m coverage run --source=app -m pytest
+============================= test session starts ==============================
+platform darwin -- Python 3.9.6, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/ronniesaba/.jenkins/workspace/Python-CI-CD_RonnieSaba
+collected 1 item
+
+tests/test_app.py .                                                      [100%]
+
+============================== 1 passed in 0.01s ===============================
++ venv/bin/python -m coverage report -m
+Name     Stmts   Miss  Cover   Missing
+--------------------------------------
+app.py       4      1    75%   6
+--------------------------------------
+TOTAL        4      1    75%
++ venv/bin/python -m coverage xml -o reports/coverage.xml
+Wrote XML report to reports/coverage.xml
++ venv/bin/python -m coverage html -d reports/htmlcov
+Wrote HTML report to reports/htmlcov/index.html
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Security Scan)
+[Pipeline] sh
++ venv/bin/python -m bandit app.py deploy_local.py -f txt -o reports/bandit.txt
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.9.6
+[text]	INFO	Text output written to file: reports/bandit.txt
++ cat reports/bandit.txt
+Run started:2026-11-16 22:24:47.956740
+
+Test results:
+	No issues identified.
+
+Code scanned:
+	Total lines of code: 31
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+Files skipped (0):
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] sh
++ venv/bin/python deploy_local.py --destination /Users/ronniesaba/jenkins_deployments/Python-CI-CD_RonnieSaba
++ cat reports/deployment.txt
+Deployed application to: /Users/ronniesaba/jenkins_deployments/Python-CI-CD_RonnieSaba/app.py
+Running deployed application:
+Hello, World from Ronnie Saba!
+Local deployment successful.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] cleanWs
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] done
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
